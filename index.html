@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Conflict Monitor — 3D News Map · 100 Zones · September 2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='%23071426' stroke='%234db8ff' stroke-width='2'/><circle cx='21' cy='10' r='3' fill='%23ff4d5a'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loading">
+  <div class="ring"></div>
+  <div class="tt">GLOBAL CONFLICT MONITOR</div>
+  <div class="st" id="loadStatus">ESTABLISHING UPLINK…</div>
+  <div class="bar"><i id="loadBar"></i></div>
+</div>
+
+<div id="stage"></div>
+<div id="vignette"></div>
+<div id="scan"></div>
+<div id="labels"></div>
+
+<header>
+  <div class="logo reveal d1">
+    <svg width="34" height="34" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#4db8ff" stroke-width="1.6"/><ellipse cx="16" cy="16" rx="13" ry="5.5" fill="none" stroke="#4db8ff" stroke-width="0.9" opacity="0.7"/><ellipse cx="16" cy="16" rx="5.5" ry="13" fill="none" stroke="#4db8ff" stroke-width="0.9" opacity="0.7"/><circle cx="21" cy="10" r="2.4" fill="#ff4d5a"/></svg>
+  </div>
+  <div class="reveal d1" style="flex-shrink:1">
+    <h1 style="font:800 16px/1.15 var(--mono);letter-spacing:2.5px;color:#fff;white-space:nowrap">GLOBAL CONFLICT <span style="color:#4db8ff">MONITOR</span>
+    <small style="display:block;font:400 9px/1.5 var(--mono);letter-spacing:1.2px;color:#7d8ca3;margin-top:2px">NEWS-DRIVEN 3D MAP · 100 ZONES · COMPILED 27 SEP 2026 · AP · REUTERS · UN · ACLED · CFR · CRISIS GROUP · HRW</small></h1>
+  </div>
+  <div class="live reveal d2"><i></i>LIVE</div>
+  <div id="clock" class="reveal d2">--:--:--</div>
+  <div class="stats reveal d3" id="stats"></div>
+</header>
+
+<div id="controls" class="reveal d2">
+  <div class="btn primary" id="btnTour">▶&nbsp; CINEMATIC TOUR <kbd>T</kbd></div>
+  <div class="btn" id="btnReset">⌖&nbsp; RESET VIEW <kbd>R</kbd></div>
+  <div class="btn active" id="btnSpin">⟳&nbsp; AUTO-ROTATE <kbd>SPACE</kbd></div>
+</div>
+
+<aside id="sidebar" class="reveal d3">
+  <div class="card" id="searchBox">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7d8ca3" stroke-width="2.4"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg>
+    <input id="search" type="text" placeholder="Search 100 zones, regions, parties…" autocomplete="off">
+  </div>
+  <div class="card chips" id="chips"></div>
+  <div class="card" id="listCard">
+    <h2><span id="listCount">ACTIVE ZONES</span><em>BY INTENSITY</em></h2>
+    <div id="conflictList"></div>
+  </div>
+</aside>
+
+<section id="detail">
+  <div class="head">
+    <div class="row">
+      <span class="cat" id="dCat"></span>
+      <span class="status" id="dStatus"></span>
+      <button id="dClose" title="Close (Esc)">✕</button>
+    </div>
+    <h2 id="dTitle"></h2>
+    <div class="loc" id="dLoc"></div>
+  </div>
+  <div class="body">
+    <div class="meterRow"><b>INTENSITY</b><div class="meter" id="dMeter"></div></div>
+    <p class="summary" id="dSummary"></p>
+    <div class="kv">
+      <div class="tile"><b>ACTIVE SINCE</b><span id="dSince"></span></div>
+      <div class="tile"><b>CASUALTIES</b><span id="dCas"></span></div>
+      <div class="tile"><b>DISPLACED</b><span id="dDisp"></span></div>
+      <div class="tile"><b>PARTIES</b><span id="dParties" style="display:flex;flex-wrap:wrap;gap:4px"></span></div>
+    </div>
+    <h3>FIELD REPORTS</h3>
+    <div id="dNews"></div>
+  </div>
+</section>
+
+<div id="tip"><div class="t"></div><div class="s"></div><div class="a">CLICK FOR BRIEFING ▸</div></div>
+
+<div id="tourDock">
+  <div class="glass">
+    <div class="td-ring">
+      <svg width="46" height="46" viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="19"/><circle class="fg" id="tourRing" cx="23" cy="23" r="19"/></svg>
+      <span id="tourCount">01/12</span>
+    </div>
+    <div class="td-body">
+      <div class="td-top"><b id="tourTitle"></b><span class="td-status" id="tourStatus"></span></div>
+      <div id="tourText"><span id="tourType"></span><span class="caret"></span></div>
+    </div>
+    <div class="td-ctrl">
+      <button id="tourPrev" title="Previous stop">⏮</button>
+      <button id="tourPause" title="Pause / resume">⏸</button>
+      <button id="tourNext" title="Next stop">⏭</button>
+    </div>
+  </div>
+  <div class="td-dots" id="tourDots"></div>
+</div>
+
+<div id="legend" class="reveal d4">
+  <div class="r"><i style="background:#ff4d5a"></i>Major war / interstate</div>
+  <div class="r"><i style="background:#ff9838"></i>Civil war / insurgency</div>
+  <div class="r"><i style="background:#ffd147"></i>Jihadist / terrorist</div>
+  <div class="r"><i style="background:#c084fc"></i>Flashpoint / tension</div>
+  <div class="r"><i style="background:#2dd4bf"></i>Cartel / criminal</div>
+  <div class="note">Beam height = intensity · animated arcs = strikes &amp; refugee flows · drag to rotate · scroll to zoom · click beacons for briefings</div>
+</div>
+
+<div id="ticker">
+  <div class="tag"><i></i>WIRE</div>
+  <div class="tickwrap"><div class="ticktrack" id="ticktrack"></div></div>
+</div>
+
+<script src="three.min.js"></script>
+<script src="data.js"></script>
+<script src="data-extra.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
