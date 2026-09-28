@@ -1,0 +1,21 @@
+{
+  "name": "3d-globe",
+  "version": "1.0.0",
+  "description": "Global Conflict Monitor - 3D News Map",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"No tests specified\"",
+    "lint": "echo \"No linter configured\""
+  },
+  "keywords": [
+    "3d",
+    "globe",
+    "threejs",
+    "visualization"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
